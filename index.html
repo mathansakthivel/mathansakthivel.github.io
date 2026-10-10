@@ -222,6 +222,20 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
 html.js .reveal{opacity:0;transform:translateY(48px) scale(.985);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
 html.js .reveal.in{opacity:1;transform:none}
 
+.menu-btn{display:none;align-items:center;gap:10px;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--ink);font-family:var(--mono);font-size:13px;cursor:pointer}
+.bars{display:inline-flex;flex-direction:column;gap:5px;width:16px}
+.bars i{display:block;height:2px;border-radius:2px;background:currentColor;transition:transform .25s}
+nav.top.open .bars i:first-child{transform:translateY(3.5px) rotate(45deg)}
+nav.top.open .bars i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+@media (max-width:900px){
+  nav.top{padding:8px 8px 8px 16px;gap:0;top:8px}
+  .menu-btn{display:inline-flex}
+  .navlinks{display:none;width:100%;flex-direction:column;align-items:stretch;gap:2px;padding:10px 0 4px;margin-top:8px;border-top:1px solid var(--line)}
+  nav.top.open .navlinks{display:flex}
+  .navlinks .navlink{padding:12px;font-size:15px}
+  .navlinks .btn-ghost,.navlinks .btn-dark{text-align:center;margin-top:6px}
+  .navlinks .theme-btn{width:100%;margin-top:6px}
+}
 @media (max-width:640px){
   .wrap{padding:16px 16px 64px}
   .pad,.hero-card{padding:28px}
@@ -403,8 +417,9 @@ document.documentElement.classList.add('js');
 })();
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230E1116'/%3E%3Ctext x='50%25' y='54%25' text-anchor='middle' dominant-baseline='middle' font-family='Arial,sans-serif' font-weight='800' font-size='30' fill='%23fff'%3EM%3Ctspan fill='%232B44E6'%3E/%3C/tspan%3E%3C/text%3E%3C/svg%3E">
-<!-- Share preview: upload og-image.png with this file, then replace YOUR-DOMAIN below with your real domain. -->
-<meta property="og:image" content="https://YOUR-DOMAIN/og-image.png">
+<meta property="og:image" content="https://mathanmaddy.github.io/og-image.png">
+<meta property="og:url" content="https://mathanmaddy.github.io/">
+<link rel="canonical" href="https://mathanmaddy.github.io/">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -436,7 +451,8 @@ document.documentElement.classList.add('js');
 
 <nav class="top" aria-label="Main">
   <a class="brand" href="#top">mathan<span>/</span>run</a>
-  <div class="navlinks">
+  <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navlinks"><span class="bars" aria-hidden="true"><i></i><i></i></span>Menu</button>
+  <div class="navlinks" id="navlinks">
     <a class="navlink" href="#clients" data-spy="clients">clients</a>
     <a class="navlink" href="#shipped" data-spy="shipped">shipped</a>
     <a class="navlink" href="#cases" data-spy="cases">deep dives</a>
@@ -1151,6 +1167,14 @@ document.documentElement.classList.add('js');
   } else {
     reveals.forEach(function (r) { r.classList.add('in'); });
   }
+
+  /* ---------------- mobile menu ---------------- */
+  var nav = document.querySelector('nav.top');
+  function setMenu(open) { nav.classList.toggle('open', open); $('menuBtn').setAttribute('aria-expanded', String(open)); }
+  $('menuBtn').addEventListener('click', function () { setMenu(!nav.classList.contains('open')); });
+  $('navlinks').addEventListener('click', function (ev) { if (ev.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', function (ev) { if (nav.classList.contains('open') && !nav.contains(ev.target)) setMenu(false); });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') setMenu(false); });
 
   /* ---------------- theme ---------------- */
   function setTheme(t, save) {
