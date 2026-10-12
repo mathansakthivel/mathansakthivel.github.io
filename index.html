@@ -348,6 +348,19 @@ html[data-theme="dark"] .tab[aria-pressed="true"]{box-shadow:none}
 html[data-theme="dark"] .theme-btn .i-sun{display:block}
 html[data-theme="dark"] .theme-btn .i-moon{display:none}
 
+
+/* ---------- phone: clear section boundaries ---------- */
+@media (max-width:640px){
+  #site main{counter-reset:chap}
+  #site .wrap{gap:28px}
+  #site main>section[data-chap]{counter-increment:chap;border:1px solid var(--line);box-shadow:0 1px 2px rgba(14,17,22,.05),0 10px 24px -18px rgba(14,17,22,.35)}
+  #site main>section[data-chap]::before{content:counter(chap,decimal-leading-zero) "  ·  " attr(data-chap);display:block;padding-bottom:12px;margin-bottom:2px;border-bottom:2px solid var(--accent);font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  #site main>section.dark[data-chap]{border-color:#232A35}
+  #site main>section.dark[data-chap]::before{color:#B4C0FF;border-bottom-color:#4D63F0}
+  #site main>section[data-chap] .sec-head .eyebrow{display:none}
+  #site main>section#contact>div>.mono:first-child{display:none}
+}
+
 /* ---------- recommendations ---------- */
 .recs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px}
 .rec{position:relative;margin:0;padding:28px 28px 24px;border-radius:20px;background:var(--soft);border:1px solid var(--soft-line);display:flex;flex-direction:column;gap:18px}
@@ -624,7 +637,7 @@ document.documentElement.classList.add('js');
 
 <div class="marquee-wrap" aria-hidden="true"><div class="marquee" id="marquee"></div></div>
 
-<section id="clients" class="dark pad reveal" style="display:flex;flex-direction:column;gap:28px">
+<section id="clients" data-chap="Client work" class="dark pad reveal" style="display:flex;flex-direction:column;gap:28px">
   <div class="sec-head">
     <div><span class="eyebrow" style="color:#9AA2AE">$ mathan --mode=client</span><h2 class="h2">In the room with clients</h2></div>
     <span style="font-size:16px;color:#9AA2AE;max-width:420px">Building it is half the job. The other half is showing it, scoping it and getting it adopted.</span>
@@ -637,7 +650,7 @@ document.documentElement.classList.add('js');
   </div>
 </section>
 
-<section id="voices" class="card pad reveal" style="display:flex;flex-direction:column;gap:28px">
+<section id="voices" data-chap="Recommendations" class="card pad reveal" style="display:flex;flex-direction:column;gap:28px">
   <div class="sec-head">
     <div><span class="eyebrow">$ cat ./recommendations</span><h2 class="h2">In their words</h2><span style="font-size:16px;color:var(--muted)">Excerpts from LinkedIn recommendations — unedited apart from trimming.</span></div>
     <a class="mono" href="https://www.linkedin.com/in/mathan-sakthivel-a306b861/details/recommendations/" target="_blank" rel="noopener" style="font-size:13px">read them in full on LinkedIn ↗</a>
@@ -666,7 +679,7 @@ document.documentElement.classList.add('js');
   </div>
 </section>
 
-<section id="shipped" class="card pad reveal" style="display:flex;flex-direction:column;gap:28px">
+<section id="shipped" data-chap="Shipped &amp; live" class="card pad reveal" style="display:flex;flex-direction:column;gap:28px">
   <div class="sec-head">
     <div><span class="eyebrow">$ ls ./production --live</span><h2 class="h2">Shipped &amp; live</h2></div>
     <span class="eyebrow">tap + for the details</span>
@@ -674,7 +687,7 @@ document.documentElement.classList.add('js');
   <div class="grid proj-grid" id="projects"></div>
 </section>
 
-<section id="cases" class="card pad reveal" style="display:flex;flex-direction:column;gap:36px">
+<section id="cases" data-chap="Deep dives" class="card pad reveal" style="display:flex;flex-direction:column;gap:36px">
   <div class="sec-head">
     <div><span class="eyebrow">$ open ./case-studies</span><h2 class="h2">Deep dives</h2><span style="font-size:16px;color:var(--muted)">Two systems, end to end — what they do and how they work.</span></div>
   </div>
@@ -754,7 +767,7 @@ document.documentElement.classList.add('js');
   </article>
 </section>
 
-<section id="experience" class="card pad reveal" style="display:flex;flex-direction:column;gap:24px">
+<section id="experience" data-chap="Experience" class="card pad reveal" style="display:flex;flex-direction:column;gap:24px">
   <div class="sec-head">
     <div><span class="eyebrow">$ git log --career</span><h2 class="h2">Experience</h2><span style="font-size:16px;color:var(--muted)">14+ years · six organisations · open any role for the full record.</span></div>
     <button type="button" class="toggle-all" id="toggleAll">expand all ↓</button>
@@ -783,7 +796,7 @@ document.documentElement.classList.add('js');
   </div>
 </section>
 
-<section id="skills" class="card pad reveal" style="display:flex;flex-direction:column;gap:32px">
+<section id="skills" data-chap="Skills" class="card pad reveal" style="display:flex;flex-direction:column;gap:32px">
   <div class="sec-head">
     <div><span class="eyebrow">$ mathan.toolbelt --all</span><h2 class="h2">The toolbelt</h2><span style="font-size:16px;color:var(--muted)"><span id="skillCount"></span> skills — from model internals to the boardroom.</span></div>
     <div class="legend"><span><i class="sw" style="background:var(--accent)"></i>core strength</span><span><i class="sw" style="border:1px solid #C5CBD3"></i>shipped with</span></div>
@@ -801,7 +814,7 @@ document.documentElement.classList.add('js');
   </div>
 </section>
 
-<section id="research" class="card pad reveal" style="display:flex;flex-direction:column;gap:24px">
+<section id="research" data-chap="Research" class="card pad reveal" style="display:flex;flex-direction:column;gap:24px">
   <div class="sec-head">
     <div><span class="eyebrow">SIDE QUESTS THAT AREN'T SIDE QUESTS</span><h2 class="h2">Research &amp; open work</h2></div>
     <a class="mono" href="#paper" style="font-size:13px">read the full research page ⇄</a>
@@ -823,7 +836,7 @@ document.documentElement.classList.add('js');
   </div>
 </section>
 
-<section id="contact" class="dark contact reveal">
+<section id="contact" data-chap="Contact" class="dark contact reveal">
   <div style="display:flex;flex-direction:column;gap:14px">
     <span class="mono" style="font-size:13px;color:#9AA2AE">$ mathan.contact()</span>
     <span class="big">Got an idea?<br>Let's run it.</span>
