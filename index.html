@@ -237,6 +237,33 @@ nav.top.open .bars i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
   .term{min-height:auto}
   .stats b{font-size:28px}
 }
+/* ---------- at a glance (phones/tablets only) ---------- */
+.glance{display:none}
+.nav-sec{display:none}
+@media (max-width:900px){
+  .glance{display:flex;flex-direction:column;gap:16px;padding:22px 20px}
+  .g-k{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.04em}
+  .g-now{display:flex;flex-direction:column;gap:3px}
+  .g-now b{font-size:18px;line-height:1.3;letter-spacing:-.01em}
+  .g-now span:last-child{font-size:14px;color:var(--muted)}
+  .g-pillars{display:grid;gap:8px}
+  .g-pillars a{display:grid;grid-template-columns:72px 1fr;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;background:var(--soft);border:1px solid var(--soft-line);color:var(--ink);text-decoration:none;min-height:44px}
+  .g-pillars b{font-size:15px;color:var(--accent)}
+  .g-pillars span{font-size:14px;line-height:1.4;color:var(--ink-2)}
+  .g-path ol{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;font-size:14px;color:var(--ink-2)}
+  .g-path li{display:inline-flex;align-items:center}
+  .g-path li:not(:last-child)::after{content:"→";margin:0 7px;color:var(--faint)}
+  .g-path li.now{font-weight:700;color:var(--accent)}
+  .g-jump{display:flex;flex-wrap:wrap;gap:8px;padding-top:14px;border-top:1px dashed var(--line)}
+  .g-jump a{display:inline-flex;align-items:center;min-height:40px;padding:0 12px;border-radius:999px;border:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--ink-2);text-decoration:none}
+  .nav-sec{display:inline;margin-left:10px;padding-left:10px;border-left:1px solid var(--line);font-family:var(--mono);font-size:12px;font-weight:400;color:var(--accent)}
+  .nav-sec:empty{display:none}
+}
+@media (max-width:640px){
+  #site .term{display:none}
+  #site #palHint{display:none}
+}
+
 /* ---------- phone layout: shorter page, swipe rows ---------- */
 .swipe-hint{display:none}
 @media (max-width:640px){
@@ -496,7 +523,7 @@ document.documentElement.classList.add('js');
 <div class="wrap">
 
 <nav class="top" aria-label="Main">
-  <a class="brand" href="#top">mathan<span>/</span>run</a>
+  <a class="brand" href="#top">mathan<span>/</span>run<span class="nav-sec" id="navSec" aria-hidden="true"></span></a>
   <button type="button" class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navlinks"><span class="bars" aria-hidden="true"><i></i><i></i></span>Menu</button>
   <div class="navlinks" id="navlinks">
     <a class="navlink" href="#clients" data-spy="clients">clients</a>
@@ -561,6 +588,23 @@ document.documentElement.classList.add('js');
       </div>
     </div>
   </div>
+</section>
+
+<section class="glance card" aria-label="At a glance">
+  <span class="eyebrow">AT A GLANCE</span>
+  <div class="g-now"><span class="g-k">NOW</span><b>Engineering Manager — AI in Software Engineering</b><span>CitiusTech · AI First Engineering</span></div>
+  <div class="g-pillars">
+    <a href="#shipped"><b>Builds</b><span>10+ AI systems live — RAG, multi-agent, LLM apps</span></a>
+    <a href="#clients"><b>Wins</b><span>Client demos, PoCs and pre-sales solutioning</span></a>
+    <a href="#experience"><b>Scales</b><span>5,000+ people enabled to build with GenAI</span></a>
+  </div>
+  <div class="g-path" aria-label="Career path">
+    <span class="g-k">14+ YEARS</span>
+    <ol><li>NIIT</li><li>Infosys</li><li>Accenture</li><li>GlobalLogic</li><li>FPT Software</li><li class="now">CitiusTech</li></ol>
+  </div>
+  <nav class="g-jump" aria-label="Jump to section">
+    <a href="#voices">Recommendations</a><a href="#shipped">Projects</a><a href="#cases">Deep dives</a><a href="#skills">Skills</a><a href="#contact">Contact</a>
+  </nav>
 </section>
 
 <div class="marquee-wrap" aria-hidden="true"><div class="marquee" id="marquee"></div></div>
@@ -1241,6 +1285,10 @@ document.documentElement.classList.add('js');
       a.classList.toggle('active', on);
       if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
     });
+    var lab = '';
+    [['clients', 'clients'], ['voices', 'recommendations'], ['shipped', 'shipped'], ['cases', 'deep dives'], ['experience', 'experience'], ['skills', 'skills'], ['research', 'research'], ['contact', 'contact']]
+      .forEach(function (x) { var el = $(x[0]); if (el && el.getBoundingClientRect().top <= 160) lab = x[1]; });
+    if ($('navSec').textContent !== lab) $('navSec').textContent = lab;
   }
   window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(spy); } }, { passive: true });
   spy();
