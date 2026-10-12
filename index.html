@@ -265,7 +265,9 @@ nav.top.open .bars i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
 }
 
 /* ---------- phone layout: shorter page, swipe rows ---------- */
-.swipe-hint{display:none}
+.m-more{display:none;align-self:flex-start;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line-2);background:var(--card);color:var(--ink);font-family:var(--mono);font-size:13px;cursor:pointer}
+.m-more:hover{border-color:var(--ink)}
+.rec-short{display:none}
 @media (max-width:640px){
   #site .pad,#site .hero-card{padding:24px 20px}
   #site .h2{font-size:32px}
@@ -275,15 +277,29 @@ nav.top.open .bars i:last-child{transform:translateY(-3.5px) rotate(-45deg)}
   #site .term{padding:16px;font-size:12.5px;gap:2px}
   #site .term .step .n:not(:first-child),#site .term .step .out{display:none}
   #site .term .summary,#site .term .thinking{display:none}
-  #site .swipe-hint{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--faint)}
-  #site .dark .swipe-hint{color:#9AA2AE}
-  #site .client-grid,#site .recs,#site .case-goals{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -20px;padding:0 20px 6px;gap:12px}
-  #site .client-grid::-webkit-scrollbar,#site .recs::-webkit-scrollbar,#site .case-goals::-webkit-scrollbar{display:none}
-  #site .client-grid>*,#site .recs>*{flex:0 0 84%;scroll-snap-align:start;min-height:0}
-  #site .case-goals>*{flex:0 0 70%;scroll-snap-align:start}
-  #site .ctile{min-height:190px}
-  #site .rec{padding:22px 20px 18px}
-  #site .rec blockquote{font-size:16px}
+  /* clients: compact vertical list */
+  #site .client-grid{display:flex;flex-direction:column;gap:8px}
+  #site .ctile{min-height:0;padding:14px 16px;gap:4px;border-radius:14px}
+  #site .ctile .k{display:none}
+  #site .ctile strong{font-size:17px}
+  #site .ctile p{font-size:14px;line-height:1.45}
+  /* recommendations: stacked, key line first, full excerpt on tap */
+  #site .recs{display:flex;flex-direction:column;gap:10px}
+  #site .rec{padding:18px 18px 14px;gap:12px}
+  #site .rec::before{font-size:64px;top:4px;right:14px}
+  #site .rec .theme{display:none}
+  #site .rec blockquote{display:none;font-size:15px}
+  #site .rec.open blockquote{display:block}
+  #site .rec .rec-short{display:block;margin:0;font-size:16px;line-height:1.5;color:var(--ink)}
+  #site .rec.open .rec-short{display:none}
+  #site .rec figcaption{padding-top:12px}
+  /* case studies: summary first, flow on tap */
+  #site .case-goals{display:flex;flex-direction:column;gap:6px}
+  #site .case-goals div{padding:10px 12px;font-size:14px}
+  #site .case .diagram,#site .case .case-goals,#site .case .case-text .tags{display:none}
+  #site .case.open .diagram,#site .case.open .case-goals,#site .case.open .case-text .tags{display:flex}
+  #site .case.open .case-text .tags{flex-wrap:wrap}
+  #site .m-more{display:inline-flex}
   #site .proj .line{display:none}
   #site .proj summary{padding:16px 16px 16px 18px;align-items:center}
   #site .proj .more{padding:0 18px 16px}
@@ -610,7 +626,7 @@ document.documentElement.classList.add('js');
 
 <section id="clients" class="dark pad reveal" style="display:flex;flex-direction:column;gap:28px">
   <div class="sec-head">
-    <div><span class="eyebrow" style="color:#9AA2AE">$ mathan --mode=client</span><h2 class="h2">In the room with clients</h2><span class="swipe-hint">swipe for more →</span></div>
+    <div><span class="eyebrow" style="color:#9AA2AE">$ mathan --mode=client</span><h2 class="h2">In the room with clients</h2></div>
     <span style="font-size:16px;color:#9AA2AE;max-width:420px">Building it is half the job. The other half is showing it, scoping it and getting it adopted.</span>
   </div>
   <div class="grid client-grid" tabindex="0" role="region" aria-label="Client work">
@@ -623,7 +639,7 @@ document.documentElement.classList.add('js');
 
 <section id="voices" class="card pad reveal" style="display:flex;flex-direction:column;gap:28px">
   <div class="sec-head">
-    <div><span class="eyebrow">$ cat ./recommendations</span><h2 class="h2">In their words</h2><span class="swipe-hint">swipe for more →</span><span style="font-size:16px;color:var(--muted)">Excerpts from LinkedIn recommendations — unedited apart from trimming.</span></div>
+    <div><span class="eyebrow">$ cat ./recommendations</span><h2 class="h2">In their words</h2><span style="font-size:16px;color:var(--muted)">Excerpts from LinkedIn recommendations — unedited apart from trimming.</span></div>
     <a class="mono" href="https://www.linkedin.com/in/mathan-sakthivel-a306b861/details/recommendations/" target="_blank" rel="noopener" style="font-size:13px">read them in full on LinkedIn ↗</a>
   </div>
   <div class="recs" tabindex="0" role="region" aria-label="Recommendations">
@@ -1268,6 +1284,31 @@ document.documentElement.classList.add('js');
     }, { threshold: 0.25 });
     diagrams.forEach(function (d) { dio.observe(d); });
   }
+
+  /* ---------------- phone: tap-to-expand recommendations & case studies ---------------- */
+  function moreBtn(label, owner) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'm-more'; b.setAttribute('aria-expanded', 'false');
+    b.innerHTML = label + ' <span aria-hidden="true">+</span>';
+    b.addEventListener('click', function () {
+      var open = owner.classList.toggle('open');
+      b.setAttribute('aria-expanded', String(open));
+      b.innerHTML = (open ? 'Show less' : label) + ' <span aria-hidden="true">' + (open ? '−' : '+') + '</span>';
+    });
+    return b;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.rec'), function (r) {
+    var marks = Array.prototype.map.call(r.querySelectorAll('blockquote mark'), function (m) { return m.textContent; });
+    var p = document.createElement('p'); p.className = 'rec-short';
+    p.textContent = '“…' + marks.join(' … ') + '…”';
+    var q = r.querySelector('blockquote');
+    q.parentNode.insertBefore(p, q);
+    q.parentNode.insertBefore(moreBtn('Read more', r), q.nextSibling);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.case'), function (c) {
+    var lede = c.querySelector('.lede');
+    if (lede) lede.parentNode.insertBefore(moreBtn('See how it works', c), lede.nextSibling);
+  });
 
   /* ---------------- scroll-spy nav ---------------- */
   var links = Array.prototype.slice.call(document.querySelectorAll('[data-spy]'));
